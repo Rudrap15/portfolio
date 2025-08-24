@@ -1,0 +1,468 @@
+<html lang="en" ng-app="portfolioApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rudra Patel - Professional Portfolio</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary: #4e54c8;
+            --secondary: #8f94fb;
+            --accent: #ffd700;
+            --dark: #121212;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: var(--light);
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') no-repeat center center;
+            background-size: cover;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        
+        .navbar {
+            background: rgba(18, 18, 18, 0.95) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            padding: 0.8rem 1rem;
+        }
+        
+        .navbar-brand {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: var(--accent) !important;
+            font-size: 1.5rem;
+        }
+        
+        .nav-link {
+            color: var(--light) !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+        
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--accent) !important;
+        }
+        
+        .container-main {
+            max-width: 1000px;
+            margin: 80px auto 40px;
+            background: rgba(18, 18, 18, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.8s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--accent);
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--accent);
+        }
+        
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .active {
+            display: block;
+        }
+        
+        .hero-content {
+            text-align: center;
+            padding: 40px 0;
+        }
+        
+        .hero-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+        
+        .lead {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            font-weight: 400;
+        }
+        
+        .profile-img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--accent);
+            margin: 0 auto 30px;
+            display: block;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .list-group-item {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            border: none;
+            margin-bottom: 10px;
+            border-radius: 5px !important;
+            transition: all 0.3s ease;
+            padding: 15px 20px;
+        }
+        
+        .list-group-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(5px);
+        }
+        
+        .skill-badge {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            display: inline-block;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .contact-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .contact-icon {
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-right: 15px;
+        }
+        
+        .hobby-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .hobby-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .hobby-icon {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+        
+        .language-progress {
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            margin-bottom: 10px;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+        }
+        
+        .social-links {
+            margin-top: 30px;
+        }
+        
+        .social-link {
+            display: inline-block;
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 45px;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background: var(--accent);
+            color: var(--dark);
+            transform: translateY(-3px);
+        }
+        
+        @media (max-width: 768px) {
+            .container-main {
+                padding: 25px;
+                margin: 70px auto 30px;
+            }
+            
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .lead {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body ng-controller="PortfolioController">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#" ng-click="showPage('home')">Rudra Patel</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" ng-click="showPage('home')" ng-class="{ active: currentPage === 'home' }">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" ng-click="showPage('about')" ng-class="{ active: currentPage === 'about' }">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" ng-click="showPage('resume')" ng-class="{ active: currentPage === 'resume' }">Resume</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" ng-click="showPage('contact')" ng-class="{ active: currentPage === 'contact' }">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container container-main">
+        <!-- Home Page -->
+        <div id="home" class="page" ng-class="{ active: currentPage === 'home' }">
+            <div class="hero-content">
+                
+                <h1 class="hero-title">Rudra Patel</h1>
+                <p class="lead">IT Student & Software Developer</p>
+                <div class="row">
+                    <div class="col-md-8 mx-auto">
+                        <p>I specialize in building modern, user-friendly web applications with expertise in Java, Python, and Web Development.</p>
+                        <p>My academic journey has strengthened my skills in programming and teamwork, and I enjoy working on creative projects that solve real-world problems.</p>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        <!-- About Us Page -->
+        <div id="about" class="page" ng-class="{ active: currentPage === 'about' }">
+            <h2 class="section-title">About Me</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <p>Hello! I am Rudra Patel, a dedicated student pursuing Information Technology with a passion for learning new technologies and applying them effectively.</p>
+                    <p>With skills in Java, Python, and Web Development, I enjoy problem-solving and believe in continuous learning and adapting to industry trends.</p>
+                </div>
+                <div class="col-md-6">
+                    <p>My goal is to contribute to impactful projects that make a difference. Collaboration and teamwork have always been at the core of my journey.</p>
+                    <p>This portfolio reflects my commitment, skills, and growth as an IT professional ready to take on new challenges.</p>
+                </div>
+            </div>
+            
+            <h3 class="mt-5">My Skills</h3>
+            <div class="mt-4">
+                <span class="skill-badge" ng-repeat="skill in portfolio.skills">{{ skill }}</span>
+            </div>
+        </div>
+        
+        <!-- Resume Page -->
+        <div id="resume" class="page" ng-class="{ active: currentPage === 'resume' }">
+            <h2 class="section-title">My Resume</h2>
+            
+            <h3><i class="bi bi-book-fill me-2"></i>Education</h3>
+            <ul class="list-group mt-4">
+                <li class="list-group-item" ng-repeat="edu in portfolio.education">
+                    <i class="bi bi-mortarboard-fill me-2"></i> {{ edu }}
+                </li>
+            </ul>
+            
+            <h3 class="mt-5"><i class="bi bi-tools me-2"></i>Skills</h3>
+            <div class="row mt-4">
+                <div class="col-md-6" ng-repeat="skill in portfolio.skills">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>{{ skill }}</span>
+                        <span>90%</span>
+                    </div>
+                    <div class="language-progress">
+                        <div class="progress-bar" role="progressbar" style="width: 90%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <h3 class="mt-5"><i class="bi bi-code-slash me-2"></i>Projects</h3>
+            <div class="card mt-4 bg-transparent border-light">
+                <div class="card-body">
+                    <h4 class="card-title text-accent">{{ portfolio.project.name }}</h4>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item bg-transparent text-light" ng-repeat="detail in portfolio.project.details">
+                            <i class="bi bi-check-circle-fill text-success me-2"></i> {{ detail }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Contact Page -->
+        <div id="contact" class="page" ng-class="{ active: currentPage === 'contact' }">
+            <h2 class="section-title">Get In Touch</h2>
+            
+            <div class="contact-info">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="bi bi-geo-alt-fill contact-icon"></i>
+                    <div>
+                        <h5 class="mb-0">Address</h5>
+                        <p class="mb-0">{{ portfolio.contact.address }}</p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center mb-3">
+                    <i class="bi bi-telephone-fill contact-icon"></i>
+                    <div>
+                        <h5 class="mb-0">Phone</h5>
+                        <p class="mb-0">{{ portfolio.contact.phone }}</p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-envelope-fill contact-icon"></i>
+                    <div>
+                        <h5 class="mb-0">Email</h5>
+                        <p class="mb-0">{{ portfolio.contact.email }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Hobbies</h3>
+                    <div class="row mt-4">
+                        <div class="col-6 mb-4" ng-repeat="hobby in portfolio.hobbies">
+                            <div class="hobby-card">
+                                <i class="bi bi-book hobby-icon" ng-if="$index === 0"></i>
+                                <i class="bi bi-brush hobby-icon" ng-if="$index === 1"></i>
+                                <h5>{{ hobby }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <h3>Languages</h3>
+                    <div class="mt-4">
+                        <div class="mb-3" ng-repeat="lang in portfolio.languages">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>{{ lang }}</span>
+                                <span>{{ $index === 0 ? 'Native' : ($index === 1 ? 'Fluent' : 'Intermediate') }}</span>
+                            </div>
+                            <div class="language-progress">
+                                <div class="progress-bar" role="progressbar" ng-style="{ width: $index === 0 ? '100%' : ($index === 1 ? '90%' : '75%') }"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        angular.module('portfolioApp', []).controller('PortfolioController', function($scope) {
+            $scope.portfolio = {
+                name: "Rudra Patel",
+                description: "Highly motivated IT student with Java programming skills and teamwork abilities.",
+                skills: ["Java", "Python", "HTML", "CSS", "MySQL", "Git", "Problem Solving"],
+                education: [
+                    "Diploma in Information Technology, Government Polytechnic, Ahmedabad (CPI: 8.80/10, 2020-2023)",
+                    "10th, Muktajivan School, Ahmedabad (82%, 2020)"
+                ],
+                project: {
+                    name: "Shopping Website",
+                    details: [
+                        "Developed a Java-based shopping website using modern frameworks.",
+                        "Implemented user authentication, product catalog management, and shopping cart functionality.",
+                        "Utilized database systems for efficient data storage and retrieval."
+                    ]
+                },
+                contact: {
+                    address: "Isanpur, Ahmedabad-382443",
+                    phone: "+91 8128383925",
+                    email: "rudrapatel150705@gmail.com"
+                },
+                hobbies: ["Reading Books", "Drawing"],
+                languages: ["Gujarati", "English", "Hindi"]
+            };
+            
+            // Set initial page
+            $scope.currentPage = 'home';
+            
+            // Function to show pages
+            $scope.showPage = function(page) {
+                $scope.currentPage = page;
+            };
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
